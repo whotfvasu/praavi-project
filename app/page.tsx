@@ -1,59 +1,354 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { Search, Filter, ChevronDown, Download, MoreHorizontal, Clock, AlertCircle, User, Power } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { useState } from 'react';
+import { Search, Filter, ChevronDown, Download, MoreHorizontal, Clock, AlertCircle, User, Power } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
-const employees = [
+interface Employee {
+  id: number;
+  name: string;
+  role: string;
+  department: string;
+  avatar: string;
+  summary: {
+    calculated: {
+      present: number;
+      absent: number;
+      wo: number;
+      bonus: string;
+      ot: string;
+      lt: string;
+      otLt: string;
+      finalAtt: number;
+      finalizedBy: string;
+    };
+    final: {
+      present: number;
+      absent: number;
+      wo: number;
+      bonus: string;
+      ot: string;
+      lt: string;
+      otLt: string;
+      finalAtt: number;
+      lockedBy: string;
+    };
+  };
+}
+
+interface AttendanceEntry {
+  date: string;
+  day: string;
+  timePlanned: string;
+  actualTime: string;
+  fineBonus: {
+    current: string;
+    previous: string;
+  };
+  error: boolean;
+  calAtt: string;
+  finalAtt: string;
+}
+
+const employees: Employee[] = [
   {
     id: 1,
-    name: "Vasu Parashar",
-    role: "Sales Manager",
-    department: "Sales Dept.",
-    avatar: "/avatar1.JPG",
+    name: 'Vasu Parashar',
+    role: 'Sales Manager',
+    department: 'Sales Dept.',
+    avatar: '/avatar1.JPG',
     summary: {
       calculated: {
         present: 17.5,
         absent: 2.5,
         wo: 11,
-        bonus: "+2000",
-        ot: "17:32 H",
-        lt: "-12:00 H",
-        otLt: "05:32 H",
+        bonus: '+2000',
+        ot: '17:32 H',
+        lt: '-12:00 H',
+        otLt: '05:32 H',
         finalAtt: 20,
-        finalizedBy: "Rahul"
+        finalizedBy: 'Rahul'
       },
       final: {
         present: 23.5,
         absent: 3.5,
         wo: 4,
-        bonus: "+400",
-        ot: "12:30 H",
-        lt: "-19:00",
-        otLt: "-06:30 H",
+        bonus: '+400',
+        ot: '12:30 H',
+        lt: '-19:00',
+        otLt: '-06:30 H',
         finalAtt: 27,
-        lockedBy: "Shriniwas"
+        lockedBy: 'Shriniwas'
       }
     }
   },
+ 
+  {
+    id: 2,
+    name: 'Vasu Parashar',
+    role: 'Sales Manager',
+    department: 'Sales Dept.',
+    avatar: '/avatar1.JPG',
+    summary: {
+      calculated: {
+        present: 17.5,
+        absent: 2.5,
+        wo: 11,
+        bonus: '+3000',
+        ot: '12:35 H',
+        lt: '-11:00 H',
+        otLt: '04:32 H',
+        finalAtt: 20,
+        finalizedBy: 'Gopal'
+      },
+      final: {
+        present: 45.8,
+        absent: 3.5,
+        wo: 4,
+        bonus: '+400',
+        ot: '12:30 H',
+        lt: '-19:00',
+        otLt: '-06:30 H',
+        finalAtt: 27,
+        lockedBy: 'Rohan Bhaiya'
+      }
+    }
+  },
+  {
+    id: 3,
+    name: 'Vasu Parashar',
+    role: 'Sales Manager',
+    department: 'Sales Dept.',
+    avatar: '/avatar1.JPG',
+    summary: {
+      calculated: {
+        present: 17.5,
+        absent: 2.5,
+        wo: 11,
+        bonus: '+2000',
+        ot: '17:32 H',
+        lt: '-12:00 H',
+        otLt: '05:32 H',
+        finalAtt: 20,
+        finalizedBy: 'Rahul'
+      },
+      final: {
+        present: 23.5,
+        absent: 3.5,
+        wo: 4,
+        bonus: '+400',
+        ot: '12:30 H',
+        lt: '-19:00',
+        otLt: '-06:30 H',
+        finalAtt: 27,
+        lockedBy: 'Shriniwas'
+      }
+    }
+  },
+  {
+    id: 4,
+    name: 'Vasu Parashar',
+    role: 'Sales Manager',
+    department: 'Sales Dept.',
+    avatar: '/avatar1.JPG',
+    summary: {
+      calculated: {
+        present: 17.5,
+        absent: 2.5,
+        wo: 11,
+        bonus: '+2000',
+        ot: '17:32 H',
+        lt: '-12:00 H',
+        otLt: '05:32 H',
+        finalAtt: 20,
+        finalizedBy: 'Rahul'
+      },
+      final: {
+        present: 23.5,
+        absent: 3.5,
+        wo: 4,
+        bonus: '+400',
+        ot: '12:30 H',
+        lt: '-19:00',
+        otLt: '-06:30 H',
+        finalAtt: 27,
+        lockedBy: 'Shriniwas'
+      }
+    }
+  },
+  {
+    id: 5,
+    name: 'Vasu Parashar',
+    role: 'Sales Manager',
+    department: 'Sales Dept.',
+    avatar: '/avatar1.JPG',
+    summary: {
+      calculated: {
+        present: 17.5,
+        absent: 2.5,
+        wo: 11,
+        bonus: '+2000',
+        ot: '17:32 H',
+        lt: '-12:00 H',
+        otLt: '05:32 H',
+        finalAtt: 20,
+        finalizedBy: 'Rahul'
+      },
+      final: {
+        present: 23.5,
+        absent: 3.5,
+        wo: 4,
+        bonus: '+400',
+        ot: '12:30 H',
+        lt: '-19:00',
+        otLt: '-06:30 H',
+        finalAtt: 27,
+        lockedBy: 'Shriniwas'
+      }
+    }
+  },
+  {
+    id: 6,
+    name: 'Vasu Parashar',
+    role: 'Sales Manager',
+    department: 'Sales Dept.',
+    avatar: '/avatar1.JPG',
+    summary: {
+      calculated: {
+        present: 17.5,
+        absent: 2.5,
+        wo: 11,
+        bonus: '+2000',
+        ot: '17:32 H',
+        lt: '-12:00 H',
+        otLt: '05:32 H',
+        finalAtt: 20,
+        finalizedBy: 'Rahul'
+      },
+      final: {
+        present: 23.5,
+        absent: 3.5,
+        wo: 4,
+        bonus: '+400',
+        ot: '12:30 H',
+        lt: '-19:00',
+        otLt: '-06:30 H',
+        finalAtt: 27,
+        lockedBy: 'Shriniwas'
+      }
+    }
+  },
+  {
+    id: 7,
+    name: 'Vasu Parashar',
+    role: 'Sales Manager',
+    department: 'Sales Dept.',
+    avatar: '/avatar1.JPG',
+    summary: {
+      calculated: {
+        present: 17.5,
+        absent: 2.5,
+        wo: 11,
+        bonus: '+2000',
+        ot: '17:32 H',
+        lt: '-12:00 H',
+        otLt: '05:32 H',
+        finalAtt: 20,
+        finalizedBy: 'Rahul'
+      },
+      final: {
+        present: 23.5,
+        absent: 3.5,
+        wo: 4,
+        bonus: '+400',
+        ot: '12:30 H',
+        lt: '-19:00',
+        otLt: '-06:30 H',
+        finalAtt: 27,
+        lockedBy: 'Shriniwas'
+      }
+    }
+  },
+  {
+    id: 8,
+    name: 'Vasu Parashar',
+    role: 'Sales Manager',
+    department: 'Sales Dept.',
+    avatar: '/avatar1.JPG',
+    summary: {
+      calculated: {
+        present: 17.5,
+        absent: 2.5,
+        wo: 11,
+        bonus: '+2000',
+        ot: '17:32 H',
+        lt: '-12:00 H',
+        otLt: '05:32 H',
+        finalAtt: 20,
+        finalizedBy: 'Rahul'
+      },
+      final: {
+        present: 23.5,
+        absent: 3.5,
+        wo: 4,
+        bonus: '+400',
+        ot: '12:30 H',
+        lt: '-19:00',
+        otLt: '-06:30 H',
+        finalAtt: 27,
+        lockedBy: 'Shriniwas'
+      }
+    }
+  },
+  {
+    id: 9,
+    name: 'Vasu Parashar',
+    role: 'Sales Manager',
+    department: 'Sales Dept.',
+    avatar: '/avatar1.JPG',
+    summary: {
+      calculated: {
+        present: 17.5,
+        absent: 2.5,
+        wo: 11,
+        bonus: '+2000',
+        ot: '17:32 H',
+        lt: '-12:00 H',
+        otLt: '05:32 H',
+        finalAtt: 20,
+        finalizedBy: 'Rahul'
+      },
+      final: {
+        present: 23.5,
+        absent: 3.5,
+        wo: 4,
+        bonus: '+400',
+        ot: '12:30 H',
+        lt: '-19:00',
+        otLt: '-06:30 H',
+        finalAtt: 27,
+        lockedBy: 'Shriniwas'
+      }
+    }
+  }
 ];
 
-const attendanceData = [
+const attendanceData: AttendanceEntry[] = [
   {
-    date: "31-Jun-2025",
-    day: "M",
-    timePlanned: "09:00 AM - 06:30 PM @ 09:00 H",
-    actualTime: "09:00 AM - 06:32 PM @ 09:01 H",
-    fineBonus: { current: "+500", previous: "+900" },
+    date: '31-Jun-2025',
+    day: 'M',
+    timePlanned: '09:00 AM - 06:30 PM @ 09:00 H',
+    actualTime: '09:00 AM - 06:32 PM @ 09:01 H',
+    fineBonus: { current: '+500', previous: '+900' },
     error: true,
-    calAtt: "P",
-    finalAtt: "P"
+    calAtt: 'P',
+    finalAtt: 'P'
   },
 ];
 
 export default function Home() {
-  const [selectedMonth, setSelectedMonth] = useState("July");
-  const [selectedEmployee, setSelectedEmployee] = useState(employees[0]);
+  const [selectedMonth, setSelectedMonth] = useState('July');
+  const [selectedEmployee, setSelectedEmployee] = useState<Employee>(employees[0]);
 
   return (
     <main className="min-h-screen bg-[#F4F7FE]">
@@ -64,13 +359,37 @@ export default function Home() {
           <img src={selectedEmployee.avatar} alt="Profile" className="w-full h-full object-cover" />
         </div>
         <nav className="flex flex-col gap-6 flex-1">
-          <button className="p-2 hover:bg-white/10 rounded-lg transition-colors">
-            <User size={20} />
-          </button>
-          <button className="p-2 hover:bg-white/10 rounded-lg transition-colors">
-            <Clock size={20} />
-          </button>
-        </nav>
+  
+  
+
+  <button className="p-2 hover:bg-white/10 rounded-lg transition-colors">
+    <img
+      src="/Navigation-Icons.png"
+      alt="Icon 3"
+      className="w-6 h-6 object-contain"
+    />
+  </button>
+  
+
+  <button className="p-2 hover:bg-white/10 rounded-lg transition-colors">
+    <img
+      src="/Navigation-Icons (1).png"
+      alt="Icon 1"
+      className="w-6 h-6 object-contain"
+    />
+  </button>
+
+  <button className="p-2 hover:bg-white/10 rounded-lg transition-colors">
+    <img
+      src="/Navigation-Icons (2).png"
+      alt="Icon 2"
+      className="w-6 h-6 object-contain"
+    />
+  </button>
+
+ 
+  
+</nav>
         <button className="p-2 hover:bg-white/10 rounded-lg transition-colors mt-auto mb-4">
           <Power size={20} />
         </button>
@@ -78,8 +397,8 @@ export default function Home() {
 
       {/* Main Content */}
       <div className="pl-16 flex">
-        {/* Employee Cards Section */}
-        <div className="w-72 min-h-screen bg-white border-r">
+        {/* Employee Selection Sidebar */}
+        <div className="w-72 h-screen overflow-y-auto bg-white border-r">
           <div className="p-4 space-y-2">
             {employees.map((employee) => (
               <button
@@ -108,7 +427,7 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Content Area */}
+        {/* Main Content Area */}
         <div className="flex-1">
           {/* Header */}
           <header className="bg-white border-b sticky top-0 z-10">
@@ -131,38 +450,40 @@ export default function Home() {
           </header>
 
           {/* Controls */}
-          <div className="p-6 flex items-center justify-between bg-white border-b">
-            <div className="flex items-center gap-4">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
-                <input
-                  type="text"
-                  placeholder="Search"
-                  className="pl-10 pr-4 py-2 w-64 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#4318FF] focus:border-transparent"
-                />
+          <div className="p-6 bg-white border-b">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+                  <input
+                    type="text"
+                    placeholder="Search"
+                    className="pl-10 pr-4 py-2 w-64 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#4318FF] focus:border-transparent"
+                  />
+                </div>
+                <button className="flex items-center gap-2 px-4 py-2 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                  <Filter size={20} className="text-gray-500" />
+                  <span className="text-gray-700">Filters</span>
+                </button>
+                <button className="flex items-center gap-2 px-4 py-2 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                  <span className="text-gray-700">Rows</span>
+                  <ChevronDown size={16} className="text-gray-500" />
+                </button>
+                <button className="flex items-center gap-2 px-4 py-2 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                  <span className="text-gray-700">{selectedMonth}</span>
+                  <ChevronDown size={16} className="text-gray-500" />
+                </button>
               </div>
-              <button className="flex items-center gap-2 px-4 py-2 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
-                <Filter size={20} className="text-gray-500" />
-                <span className="text-gray-700">Filters</span>
-              </button>
-              <button className="flex items-center gap-2 px-4 py-2 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
-                <span className="text-gray-700">Rows</span>
-                <ChevronDown size={16} className="text-gray-500" />
-              </button>
-              <button className="flex items-center gap-2 px-4 py-2 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
-                <span className="text-gray-700">{selectedMonth}</span>
-                <ChevronDown size={16} className="text-gray-500" />
-              </button>
-            </div>
-            <div className="flex items-center gap-4">
-              <button className="flex items-center gap-2 px-4 py-2 bg-[#4318FF] text-white rounded-lg hover:bg-[#3311CC] transition-colors">
-                <Download size={20} />
-                Export
-              </button>
-              <button className="flex items-center gap-2 px-4 py-2 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
-                <span className="text-gray-700">Detailed View</span>
-                <ChevronDown size={16} className="text-gray-500" />
-              </button>
+              <div className="flex items-center gap-4">
+                <button className="flex items-center gap-2 px-4 py-2 bg-[#4318FF] text-white rounded-lg hover:bg-[#3311CC] transition-colors">
+                  <Download size={20} />
+                  Export
+                </button>
+                <button className="flex items-center gap-2 px-4 py-2 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                  <span className="text-gray-700">Detailed View</span>
+                  <ChevronDown size={16} className="text-gray-500" />
+                </button>
+              </div>
             </div>
           </div>
 
